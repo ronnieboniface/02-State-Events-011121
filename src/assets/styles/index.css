@@ -80,7 +80,14 @@ button {
   transition: all .5s ease-in-out;
 }
 
-button:active {
-  background-color: #3D405B;
-  color: #F4F1DE;
+.event-grp {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-self: center;
+  width: 50%;
+}
+
+.event-grp button, input {
+  padding: 1rem;
+  margin: 1rem;
 }

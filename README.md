@@ -1,70 +1,188 @@
-# Getting Started with Create React App
+# State & Events
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## **Events**
+  * React has its own event system that ensures events are handled consistently across browsers.
+  * The event listener is attached to the element itself in JSX.
+  There are the SAME events we worked with in vanilla JavaScript, they're just being implemented differently.
 
-## Available Scripts
+&nbsp;
 
-In the project directory, you can run:
+![Button with alert](https://media.giphy.com/media/PUF3tVhNdTfDrIGGwa/giphy.gif)
 
-### `yarn start`
+&nbsp;
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**with vanilla JavaScript:**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```html 
+  <!-- In index.html -->
+<button id="alert-tbn">Click Me!</button>
+```
 
-### `yarn test`
+```js
+  // In index.js
+const alertButton = document.getElementById('alert-btn');
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+const buttonAlert = () => {
+  alert('The button has been clicked!')
+};
 
-### `yarn build`
+alertButton.addEventListener('click', buttonAlert);
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**with React:**
+```js
+const handleClick = () => {
+  alert('The button has been clicked!')
+};
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+return <button onClick={handleClick}>Click Me!</button>;
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+&nbsp;
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## **State**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  * State is data that is controlled by a component.
+  * State is always stored as an object.
+  * State allows us to keep track of data within a component rather than relying on data sent down as props from a parent component.
+  * State allows us to have a more dynamic application.
+  * Whenever our state is changed, the component re-renders.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+&nbsp;
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### **Setting Initial State**
 
-## Learn More
+* With a constructor (outdated):
+  ```js
+  class MyComponent extends Component {
+    // constuctor runs before the render() method.
+    constructor(){
+      super();
+      this.state = {
+        count: 0
+      };
+    };
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    render() {
+      return <h1>{this.state.count}</h1>;
+    };
+  };
+  ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  &nbsp;
 
-### Code Splitting
+* Without a constructor:
+  ```js
+  class MyComponent extends Component {
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    state = {
+      count: 0
+    };
 
-### Analyzing the Bundle Size
+    render() {
+      return (
+        <h1>{this.state.count}</h1>
+      );
+    };
+  };
+  ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+&nbsp;
 
-### Making a Progressive Web App
+### **setState**
+* We cannot assign a new value to state because that will prevent the component from re-rendering.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+  ```js
+  // This is BAD.
+  class MyComponent extends Component {
 
-### Advanced Configuration
+    state = {
+      count: 0
+    };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    handleClick = () => {
+      state = {
+        count: this.state.count + 1
+      };
+    };
 
-### Deployment
+    render() {
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+      return (
+        <div>
+          <h1>{this.state.count}</h1>
+          <button onClick={this.handeClick}>Increment Counter</button>
+        </div>
+      );
+    };
+  };
+  ```
 
-### `yarn build` fails to minify
+* We use a special method called `setState` to make changes to our state.
+  ```js
+  class MyComponent extends Component {
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    state = {
+      count: 0
+    };
+
+    handleClick = () => {
+      this.setState(prevState => {
+        return count: prevState.count + 1;
+      });
+    };
+
+    render() {
+
+      return (
+        <div>
+          <h1>{this.state.count}</h1>
+          <button onClick={this.handeClick}>Increment Counter</button>
+        </div>
+      );
+    };
+  };
+  ```
+  &nbsp;
+
+* `setState` is inherited from `Component`.
+* `setState` can take in either an object or a function, but it’s generally better to use a function.
+  * There are cases where we will use an object.
+* `setState` merges our new state with our current state, which means that we can update a single key-value pair without overriding other key-value pairs in our state.
+* `setState` triggers a re-render so we can see our changes reflected in the browser.
+* `setState` is asynchronous, which saves us from unnecessary re-renders.
+  * We should not call on `this.state` when updating our state in case that version of state has not been updated yet.
+
+  &nbsp;
+
+  ```js
+  // This is BAD practice.
+  handeClick = () => {
+    this.setState({
+      count: this.state.count + 1;
+    })
+  };
+  ```
+
+&nbsp;
+
+### **Parents & Children**
+* We can only pass information from a parent component to a child component.
+* If we want to send information from a child to a parent, we can pass the child a callback function as a prop.
+* When that function is invoked in the child component, the parent component will be updated.
+
+### **Props & State**
+* What they have in common:
+  * Props & state are both objects.
+  * Changes to state & props will both trigger a re-render.
+* Use state when a component needs to be able to change stored data.
+* Use props when a component does not need to make changes to the data it’s rendering.
+* When to use a callback prop instead of setting local state?
+  * If a parent component needs access to the data inside of a component, the state should be stored with the parent.
+
+
+## **Resources**
+* [React Events](https://reactjs.org/docs/events.html)
+* [React State](https://reactjs.org/docs/state-and-lifecycle.html)
+* [Props vs. State](https://github.com/uberVU/react-guide/blob/master/props-vs-state.md)

@@ -1,5 +1,6 @@
 import React from "react";
-import SailorMoon from "./components/layout/SailorMoon";
+import Events from './components/Events';
+import SailorMoon from "./components/SailorMoon";
 
 const App = () => {
   const propsArray = [
@@ -56,9 +57,12 @@ const App = () => {
   return (
     <>
       <div className="heading">Sailor Moon & Friends</div>
-      <div className="container">
+
+      <Events />
+      
+      {/* <div className="container">
         {renderSailors()}
-      </div>
+      </div> */}
     </>
   );
 };
