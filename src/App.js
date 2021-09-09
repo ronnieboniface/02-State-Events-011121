@@ -1,5 +1,6 @@
 import React from "react";
 import Events from './components/Events';
+import State from './components/State';
 import SailorMoon from "./components/SailorMoon";
 
 const App = () => {
@@ -58,7 +59,9 @@ const App = () => {
     <>
       <div className="heading">Sailor Moon & Friends</div>
 
-      <Events />
+      <State />
+
+      {/* <Events /> */}
       
       {/* <div className="container">
         {renderSailors()}
